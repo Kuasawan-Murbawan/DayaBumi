@@ -3,6 +3,8 @@
 <cfinvoke component="components.professions" method="getAllProfessions" returntype="query" returnvariable="professions">
 <cfinvoke component="components.hobbies" method="getAllHobbies" returntype="query" returnvariable="hobbies">
 
+<!--- TODO: login link, error --->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,7 +32,7 @@
 	</div>
 
   <div class="container">
-    <form action="" method="get">
+    <form action="register_action.cfm" method="POST">
 
       <div class="form-row">
         <div class="form-group col-md-6">
@@ -43,7 +45,7 @@
           <label for="password">Password:</label> <input type="password" class="form-control" id="password" name="password" />
         </div>
         <div class="form-group col-md-6">
-          <label for="confirm-password">Confirm Password:</label> <input type="password" class="form-control" id="confirm-password" name="confirm-password" />
+          <label for="confirm-password">Confirm Password:</label> <input type="password" class="form-control" id="confirm-password" name="confirmpassword" />
         </div>
       </div>
 
