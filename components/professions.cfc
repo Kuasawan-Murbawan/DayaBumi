@@ -3,7 +3,7 @@
 
     <cffunction  name="getAllProfessions" returntype="query">
 
-        <cfquery name="allProfessions" datasource="CFTrainingDSN">
+        <cfquery name="allProfessions">
             SELECT profID, name from profession
         </cfquery>
 

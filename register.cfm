@@ -15,15 +15,19 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
     integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
-  <title>Training</title>
+  <title>Registration Page</title>
 </head>
 
 <!-- TODO: fill required -->
 
 <body>
-  <h1>Training</h1>
+  <div class="d-flex justify-content-center">
+  	<h1>Register your account</h1>
+  </div>
 
-  <p>Fill in the form below:</p>
+  <div class="d-flex justify-content-center">
+  	<p>Fill in the form below:</p>
+	</div>
 
   <div class="container">
     <form action="" method="get">
@@ -96,8 +100,23 @@
             <input type="radio" class="form-check-input" id="gender-female" name="gender" value="F" disabled>
             <label class="form-check-label" for="gender-female">Female</label>
           </div>
+
+					<input type="hidden" id="gender-hidden" name="gender" value="">
         </fieldset>
       </div>
+
+			<div class="form-group">				
+				<label>Contact preference:</label>
+				<cfloop array="#APPLICATION.contactprefs#" item="pref">
+					<cfoutput>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="pref_#pref.bit#" name="contactpreference" value="#pref.bit#" />
+							<label class="form-check-label" for="pref_#pref.bit#">#encodeForHTML(pref.label)#</label>
+						</div>
+					</cfoutput>
+				</cfloop>
+			</div>
+
       <div class="form-group"> <button type="submit">Submit</button>
       </div>
 
@@ -185,6 +204,7 @@
       const gender = lastDigit % 2 === 0 ? 'F' : 'M';
 
       document.querySelector('input[name="gender"][value=' + gender + ']').checked = true;
+			document.getElementById('gender-hidden').value = gender;
     })
 
 
