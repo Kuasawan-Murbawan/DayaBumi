@@ -31,6 +31,15 @@
   	<p>Fill in the form below:</p>
 	</div>
 
+  <cfif structKeyExists(SESSION, "errorMsg") AND len(trim(SESSION.errorMsg))>
+      <cfoutput>
+          <div class="alert alert-danger">
+              #encodeForHTML(SESSION.errorMsg)#
+          </div>
+      </cfoutput>
+      <cfset structDelete(SESSION, "errorMsg")>
+  </cfif>
+
   <div class="container">
     <form action="register_action.cfm" method="POST">
 
@@ -59,7 +68,7 @@
       <div class="form-group">
 
         <label for="profession">Profession:</label>
-        <select class="form-control" id="profession" name="profession">
+        <select class="form-control" id="profession" name="profession" required>
           <option value="">--- Select ---</option>
           <cfoutput query="professions">
             <option value="#professions.profID#">#professions.name#</option>
@@ -72,8 +81,8 @@
         <label>Hobbies:</label>
         <cfoutput query="hobbies">
         <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="#hobbies.hobbyid#" name="hobby" value="#hobbies.hobbyID#" />
-          <label class="form-check-label" for="#hobbies.hobbyid#">#hobbies.name#</label>
+          <input type="checkbox" class="form-check-input" id="hobby_#hobbies.hobbyid#" name="hobby" value="#hobbies.hobbyID#" />
+          <label class="form-check-label" for="hobby_#hobbies.hobbyid#">#hobbies.name#</label>
         </div>
         </cfoutput>
       </div>
@@ -168,6 +177,9 @@
     // Check IC validation
     function validateIC(ic, dob) {
       // compare year
+
+      if(!dob) return true;
+
       let dobYear = dob.getFullYear() % 100;
       const icYear = "" + ic[0] + ic[1];
 

@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -8,6 +9,16 @@
   <!-- <link rel='stylesheet' href='main.css'> -->
 </head>
 <body>
+
+<cfif structKeyExists(SESSION, "successMsg") AND len(trim(SESSION.successMsg))>
+    <cfoutput>
+        <div class="">
+            #encodeForHTML(SESSION.successMsg)#
+        </div>
+    </cfoutput>
+    <cfset structDelete(SESSION, "successMsg")>
+</cfif>
+
 
   <form action="login_action.cfm" method="get">
     

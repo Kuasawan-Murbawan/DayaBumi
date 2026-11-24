@@ -6,6 +6,7 @@
 <cfparam  name="FORM.dob" default="">
 <cfparam  name="FORM.aboutme" default="">
 <cfparam  name="FORM.profession" default="">
+<cfparam name="FORM.hobby" default="">
 <cfparam  name="FORM.ic" default="">
 <cfparam  name="FORM.age" default="">
 <cfparam  name="FORM.gender" default="">
@@ -25,18 +26,29 @@
    OR NOT structKeyExists(FORM, "dob") OR NOT len(trim(FORM.dob))
    OR NOT structKeyExists(FORM, "gender") OR NOT len(trim(FORM.gender))>
 
-    <cflocation  url="registration_error.cfm" addtoken="false">
+    <cfset SESSION.errorMsg="All field must be filled">
+    <cflocation  url="register.cfm" addtoken="false">
 
+</cfif>
+
+<!--- CHECKING DUPLICATE EMAIL --->
+<cfquery name="queryResult">
+  SELECT userID FROM biodata WHERE email = <cfqueryparam value="#trim(FORM.email)#" cfsqltype="cf_sql_varchar">
+</cfquery>
+
+<cfif queryResult.recordCount gt 0>
+  <cfset SESSION.errorMsg = "Email is already registered">
+  <cflocation  url="register.cfm" addtoken="false">
 </cfif>
 
 <!--- CHECKING IF PASSWORD MATCHES --->
 <cfif compare(FORM.password, FORM.confirmpassword) NEQ 0>
-  <cfset SESSION.errorMsg = "Password do not match">
-  <a href="register.cfm">Passoword do not match, back to registration</a>
+    <cfset SESSION.errorMsg = "Passwords do not match.">
+    <cflocation url="register.cfm" addtoken="false">
 </cfif>
 
 <!--- HASHING PASSWORD --->
-<cfset hashedPassword = hash(trim(FORM.password), "SHA-256")>
+<cfset hashedPassword = lCase(hash(trim(FORM.password), "SHA-256"))>
 
 <!--- Contact MASKING BIT OR --->
 <cfset contactMask = 0>
@@ -48,30 +60,48 @@
 </cfloop>
 
 <!--- INSERT INTO DATABASE --->
-<cfquery name="qInsertUser" result="insertResult">
-  INSERT INTO biodata (
-        name, email, passwordHash, dob, aboutme, profID, IC, age, gender, contactMask
-    )
-    VALUES (
-      <cfqueryparam value="#trim(FORM.name)#" cfsqltype="cf_sql_varchar">,
-        <cfqueryparam value="#trim(FORM.email)#" cfsqltype="cf_sql_varchar">,
-        <cfqueryparam value="#hashedPassword#" cfsqltype="cf_sql_varchar">,
-        <cfqueryparam value="#FORM.dob#" cfsqltype="cf_sql_date">,
-        <cfqueryparam value="#trim(FORM.aboutme)#" cfsqltype="cf_sql_varchar">,
-        <cfqueryparam value="#val(FORM.profession)#" cfsqltype="cf_sql_integer">,
-        <cfqueryparam value="#trim(FORM.IC)#" cfsqltype="cf_sql_varchar">,
-        <cfqueryparam value="#val(FORM.age)#" cfsqltype="cf_sql_integer">,
-        <cfqueryparam value="#trim(FORM.gender)#" cfsqltype="cf_sql_char">,
-        <cfqueryparam value="#contactMask#" cfsqltype="cf_sql_integer">
-    )
-</cfquery>
+<cftransaction>
+  <cfquery name="qInsertUser" result="insertResult">
+    INSERT INTO biodata (
+          name, email, passwordHash, dob, aboutme, profID, IC, age, gender, contactMask
+      )
+      VALUES (
+        <cfqueryparam value="#trim(FORM.name)#" cfsqltype="cf_sql_varchar">,
+          <cfqueryparam value="#trim(FORM.email)#" cfsqltype="cf_sql_varchar">,
+          <cfqueryparam value="#hashedPassword#" cfsqltype="cf_sql_varchar">,
+          <cfqueryparam value="#FORM.dob#" cfsqltype="cf_sql_date">,
+          <cfqueryparam value="#trim(FORM.aboutme)#" cfsqltype="cf_sql_varchar">,
+          <cfqueryparam value="#val(FORM.profession)#" cfsqltype="cf_sql_integer">,
+          <cfqueryparam value="#trim(FORM.IC)#" cfsqltype="cf_sql_varchar">,
+          <cfqueryparam value="#val(FORM.age)#" cfsqltype="cf_sql_integer">,
+          <cfqueryparam value="#trim(FORM.gender)#" cfsqltype="cf_sql_char">,
+          <cfqueryparam value="#contactMask#" cfsqltype="cf_sql_integer">
+      )
+  </cfquery>
+
+  <!---   INSERT hobby into UserHobbies table --->
+  <cfset newUserID = insertResult.generatedKey>
+
+  <cfif len(trim(FORM.hobby))>
+
+    <cfloop list="#FORM.hobby#" index="item">
+
+      <cfif isNumeric(item)>
+
+          <cfquery>
+          INSERT INTO UserHobbies (UserID, HobbyID)
+          VALUES (
+            <cfqueryparam value="#newUserID#" cfsqltype="cf_sql_integer">,
+            <cfqueryparam value="#val(item)#" cfsqltype="cf_sql_integer">
+          )
+        </cfquery>
+
+      </cfif>
+    </cfloop>
+  </cfif>
+
+</cftransaction>
 
 
-<html>
-  
-  <body>
-    Registration successful, please login using this link
-
-    <a href="login.cfm">Login</a>
-  </body>
-</html>
+<cfset SESSION.successMsg = "Registration successful, please log in">
+<cflocation url="login.cfm" addtoken="false">
