@@ -1,6 +1,7 @@
 <cfparam  name="professions" default="">
 
 <cfinvoke component="components.professions" method="getAllProfessions" returntype="query" returnvariable="professions">
+<cfinvoke component="components.hobbies" method="getAllHobbies" returntype="query" returnvariable="hobbies">
 
 <!DOCTYPE html>
 <html lang="en">
@@ -54,32 +55,23 @@
         <label for="profession">Profession:</label>
         <select class="form-control" id="profession" name="profession">
           <option value="">--- Select ---</option>
-
           <cfoutput query="professions">
             <option value="#professions.profID#">#professions.name#</option>
 
           </cfoutput> 
-                   </select>
+        </select>
       </div>
 
       <div class="form-group">
         <label>Hobbies:</label>
-
+        <cfoutput query="hobbies">
         <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="badminton" name="hobby" value="badminton" />
-          <label class="form-check-label" for="badminton">Badminton</label>
+          <input type="checkbox" class="form-check-input" id="#hobbies.hobbyid#" name="hobby" value="#hobbies.hobbyID#" />
+          <label class="form-check-label" for="#hobbies.hobbyid#">#hobbies.name#</label>
         </div>
-
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="freelance" name="hobby" value="freelance" />
-          <label class="form-check-label" for="freelance">Freelance</label>
-        </div>
-
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="swimming" name="hobby" value="swimming" />
-          <label class="form-check-label" for="swimming">Swimming</label>
-        </div>
+        </cfoutput>
       </div>
+      
       <div class="form-group">
         <label for="ic">IC:</label>
         <input type="text" class="form-control" id="ic" name="ic" maxlength="12" pattern="[0-9]{12}" required
