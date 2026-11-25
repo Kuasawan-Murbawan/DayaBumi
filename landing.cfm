@@ -11,6 +11,7 @@
     returnvariable="fullBiodata"
 >
 <cfset maskVal = (isQuery(fullBiodata) && fullBiodata.recordCount GT 0) ? val(fullBiodata.contactMask) : 0>
+
 <cfinvoke 
     component="components.professions" 
     method="getProfessionByID"
@@ -38,7 +39,7 @@
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <title>Landing Page</title>
-  <!-- <link rel='stylesheet' href='main.css'> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 </head>
 <body>
 <cfif structKeyExists(SESSION, "successMsg") AND len(trim(SESSION.successMsg))>
@@ -50,20 +51,64 @@
     <cfset structDelete(SESSION, "successMsg")>
 </cfif>
 
-Saya di landing branch
-
     <div name="biodata details">
 
-        <div name="profession">
-        <cfoutput query="professionDetails">
-            Profession: #professionDetails.name#
-        </cfoutput>
+        <div id="name">
+            Name:
+            <cfoutput>
+                #encodeForHTML(fullBiodata.name)#
+            </cfoutput>
         </div>
 
-        <div name="hobbies">
+        <div id="age">
+            Age:
+            <cfoutput>
+                #encodeForHTML(fullBiodata.age)#
+            </cfoutput>
+        </div>
+
+        <div id="dob">
+            Date Of Birth:
+            <cfoutput>
+                #encodeForHTML(fullBiodata.dob)#
+            </cfoutput>
+        </div>
+
+        <div id="ic">
+            IC:
+            <cfoutput>
+                #encodeForHTML(fullBiodata.ic)#
+            </cfoutput>
+        </div>
+
+        <div id="gender">
+            Gender:
+            <cfoutput>
+                <cfif fullBiodata.gender eq 'M'>
+                    Male
+                    <cfelse>
+                        Female
+                </cfif>
+            </cfoutput>
+        </div>
+
+        <div id="about-me">
+        About Me:
+            <cfoutput query="fullBiodata">
+                #encodeForHTML(fullBiodata.aboutme)#
+            </cfoutput>
+        </div>
+
+        <div id="profession">
+            <cfoutput query="professionDetails">
+                Profession: #encodeForHTML(professionDetails.name)#
+            </cfoutput>
+        </div>
+
+        <div id="hobbies">
             Hobbies: 
             <cfoutput query="hobbiesDetails">
-                #hobbiesDetails.name#: #hobbiesDetails.location# <br>
+                #encodeForHTML(hobbiesDetails.name)#: #encodeForHTML(hobbiesDetails.location)# <br>
             </cfoutput>
         </div>
 
@@ -85,7 +130,10 @@ Saya di landing branch
         </div>
     </div>
 
-<a href="logout.cfm">Logout</a>
+</a href="logout.cfm">Logout</a>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
 </body>
 
 </html>
