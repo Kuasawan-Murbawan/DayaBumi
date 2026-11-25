@@ -24,7 +24,7 @@ component{
     // RUNS WHEN A NEW USER SESSION BEGINS
     public void function onSessionStart(){
         SESSION.isloggedIn = false;
-        SESSION.userID = "";
+        SESSION.userID = 0;
         SESSION.userName = "";
     }
 
