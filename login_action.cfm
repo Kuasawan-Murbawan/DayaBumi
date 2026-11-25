@@ -26,20 +26,17 @@
 
 <cfset hashPw = lcase(hash(trim(FORM.password), "SHA-256"))>
 
-<cfdump  var="#quser#">
-<cfdump  var="#hashpw#">
-
 <cfif qUser.recordCount EQ 1 AND compare(qUser.passwordHash, hashPw) eq 0>
 
     <!--- TELL APPLICATION THAT THE USER IS LOGGED IN --->
     <cfset sessionRotate()>
     <cfset SESSION.isLoggedIn = true>
     <cfset SESSION.userID = qUser.userID>
-    <cfset SESSION.name = qUser.name>
+    <cfset SESSION.userName = qUser.name>
     <cfset SESSION.successMsg = "login successful, welcome #qUser.name#">
     <cflocation url="landing.cfm" addtoken="false">
 
     <cfelse>
-      <cfset SESSION.errorMsg="Email or Password is incorrecto.">
+      <cfset SESSION.errorMsg="Email or Password is incorrect.">
       <cflocation  url="login.cfm" addtoken="false">
 </cfif>
