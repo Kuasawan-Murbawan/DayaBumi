@@ -70,7 +70,7 @@
           <cfqueryparam value="#trim(FORM.email)#" cfsqltype="cf_sql_varchar">,
           <cfqueryparam value="#hashedPassword#" cfsqltype="cf_sql_varchar">,
           <cfqueryparam value="#FORM.dob#" cfsqltype="cf_sql_date">,
-          <cfqueryparam value="#trim(FORM.aboutme)#" cfsqltype="cf_sql_varchar">,
+          <cfqueryparam value="#trim(FORM.aboutme)#" cfsqltype="cf_sql_longvarchar">,
           <cfqueryparam value="#val(FORM.profession)#" cfsqltype="cf_sql_integer">,
           <cfqueryparam value="#trim(FORM.IC)#" cfsqltype="cf_sql_varchar">,
           <cfqueryparam value="#val(FORM.age)#" cfsqltype="cf_sql_integer">,
