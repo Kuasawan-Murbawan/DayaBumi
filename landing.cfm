@@ -1,3 +1,13 @@
+
+<cfset professionDetails="">
+
+<cfinvoke 
+    component="components.professions" 
+    method="getProfessionByID"
+    userID="#SESSION.userID#"
+    returnvariable="professionDetails"
+    >
+
 <html>
 <head>
   <meta charset='utf-8'>
@@ -16,6 +26,15 @@
 </cfif>
 
 Saya di landing branch
+
+    <div name="biodata details">
+
+        <div name="profession">
+        <cfoutput query="professionDetails">
+            Profession: #professionDetails.name#
+        </cfoutput>
+        </div>
+    </div>
 
 <a href="logout.cfm">Logout</a>
 </body>
