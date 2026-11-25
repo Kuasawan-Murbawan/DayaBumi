@@ -1,6 +1,16 @@
 
 <cfset professionDetails="">
+<cfset hobbiesDetails="">
+<cfset fullBiodata="">
+<cfset contactPrefs= []>
 
+<cfinvoke  
+    component="components.biodata"
+    method="getFullBiodata"
+    userID="#SESSION.userID#"
+    returnvariable="fullBiodata"
+>
+<cfset maskVal = (isQuery(fullBiodata) && fullBiodata.recordCount GT 0) ? val(fullBiodata.contactMask) : 0>
 <cfinvoke 
     component="components.professions" 
     method="getProfessionByID"
@@ -13,7 +23,15 @@
     method="getHobbyByUserID2"
     userID="#SESSION.userID#"
     returnvariable="hobbiesDetails"
-    >
+>
+
+<cfinvoke  
+    component="components.biodata"
+    method="getContactPreference"
+    contactMask="#maskVal#"
+    returnvariable="contactPrefs"
+>
+
 
 <html>
 <head>
@@ -46,6 +64,23 @@ Saya di landing branch
             Hobbies: 
             <cfoutput query="hobbiesDetails">
                 #hobbiesDetails.name#: #hobbiesDetails.location# <br>
+            </cfoutput>
+        </div>
+
+        <div id="contact-preference">
+            <cfoutput>
+                <div>
+                    Contact preference (Mask: #encodeForHTML(maskVal)#):
+                </div>
+                <cfif arrayLen(contactPrefs) GT 0>
+                    <ul>
+                        <cfloop array="#contactPrefs#" item="item">
+                            <li>#encodeForHTML(item)#</li>
+                        </cfloop>
+                    </ul>
+                    <cfelse>
+                        <div>None Selected</div>
+                </cfif>
             </cfoutput>
         </div>
     </div>
