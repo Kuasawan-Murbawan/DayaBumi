@@ -16,6 +16,8 @@
 </cfif>
 
 Saya di landing
+
+<a href="logout.cfm">Logout</a>
 </body>
 
 </html>
