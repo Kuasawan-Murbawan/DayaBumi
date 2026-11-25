@@ -15,7 +15,7 @@
     <cfset structDelete(SESSION, "successMsg")>
 </cfif>
 
-Saya di landing
+Saya di landing branch
 
 <a href="logout.cfm">Logout</a>
 </body>
