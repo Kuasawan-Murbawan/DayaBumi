@@ -1,0 +1,41 @@
+
+USE CFTrainingDB;
+
+CREATE TABLE profession(
+	profID INT IDENTITY(1,1) PRIMARY KEY ,
+	NAME VARCHAR(255)
+)
+
+CREATE TABLE hobbies(
+	hobbyID INT IDENTITY(1,1) PRIMARY KEY,
+	name VARCHAR(255),
+	location VARCHAR(255)
+)
+
+CREATE TABLE biodata(
+	userID INT IDENTITY(1,1) PRIMARY KEY,
+	name VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL UNIQUE,
+	passwordHash VARCHAR(255) NOT NULL,
+	dob DATE,
+	aboutme TEXT,
+	profID INT,
+	IC VARCHAR(12) NOT NULL,
+	age INT,
+	gender CHAR(1),
+	contactMask INT NOT NULL DEFAULT(0)
+
+	CONSTRAINT fk_prof FOREIGN KEY (profID) REFERENCES dbo.profession(profID)
+)
+
+CREATE TABLE UserHobbies(
+	userID INT NOT null,
+	hobbyID INT NOT null,
+	CONSTRAINT fk_user FOREIGN KEY (userID) REFERENCES dbo.biodata(userID),
+	CONSTRAINT fk_hobby FOREIGN KEY (hobbyID) REFERENCES dbo.hobbies(hobbyID),
+	CONSTRAINT pk_userHobbies PRIMARY KEY (userID,hobbyID)
+)
+
+SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE
+FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+WHERE TABLE_NAME = 'biodata';
